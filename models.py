@@ -1,22 +1,24 @@
-from app import db
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 class Reagente(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
     quantidade = db.Column(db.String(50))
-    validade = db.Column(db.String(20))
+    validade = db.Column(db.String(50))
     localizacao = db.Column(db.String(100))
 
 class Meio(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
     quantidade = db.Column(db.String(50))
-    validade = db.Column(db.String(20))
+    validade = db.Column(db.String(50))
     localizacao = db.Column(db.String(100))
 
 class Agendamento(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     equipamento = db.Column(db.String(100), nullable=False)
     usuario = db.Column(db.String(100))
-    data = db.Column(db.String(20))
-    horario = db.Column(db.String(20))
+    data = db.Column(db.String(50))
+    horario = db.Column(db.String(50))
