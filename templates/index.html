@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estoque de Reagentes - Laboratório</title>
+  <link rel="stylesheet" href="../static/style.css">
+  <script src="../static/script.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Estoque e Agenda - Laboratório de Micologia</h1>
+    <div class="login-area">
+      <span id="user-display"></span>
+      <button onclick="toggleLogin()" id="login-btn">Login</button>
+      <button onclick="logout()" id="logout-btn" class="hidden">Logout</button>
+    </div>
+  </header>
+
+  <nav>
+    <button onclick="showTab('reagentes')">Reagentes</button>
+    <button onclick="showTab('meios')">Meios de Cultura</button>
+    <button onclick="showTab('agenda')">Agenda</button>
+  </nav>
+
+  <section id="reagentes" class="active">
+    <h2>Reagentes</h2>
+    <table>
+      <thead>
+        <tr><th>Nome</th><th>Quantidade</th><th>Validade</th><th>Localização</th><th class="edit-only hidden">Ações</th></tr>
+      </thead>
+      <tbody id="reagentes-body">
+        <tr><td>Ácido Lático</td><td>2L</td><td>12/2025</td><td>Estante A</td><td class="edit-only hidden" class="action-btns"><button>Editar</button><button>Remover</button></td></tr>
+      </tbody>
+    </table>
+    <button class="edit-only hidden" onclick="adicionar('reagentes')">Adicionar Reagente</button>
+  </section>
+
+  <section id="meios">
+    <h2>Meios de Cultura</h2>
+    <table>
+      <thead>
+        <tr><th>Nome</th><th>Quantidade</th><th>Validade</th><th>Localização</th><th class="edit-only hidden">Ações</th></tr>
+      </thead>
+      <tbody id="meios-body">
+        <tr><td>SDA</td><td>10 placas</td><td>11/2024</td><td>Geladeira</td><td class="edit-only hidden"><button>Editar</button><button>Remover</button></td></tr>
+      </tbody>
+    </table>
+    <button class="edit-only hidden" onclick="adicionar('meios')">Adicionar Meio</button>
+  </section>
+
+  <section id="agenda">
+    <h2>Cronograma de Equipamentos e Vidrarias</h2>
+    <table>
+      <thead>
+        <tr><th>Equipamento</th><th>Usuário</th><th>Data</th><th>Horário</th><th class="edit-only hidden">Ações</th></tr>
+      </thead>
+      <tbody id="agenda-body">
+        <tr><td>Autoclave</td><td>Ana</td><td>28/06/2025</td><td>08:00-10:00</td><td class="edit-only hidden"><button>Editar</button><button>Remover</button></td></tr>
+      </tbody>
+    </table>
+    <button class="edit-only hidden" onclick="adicionar('agenda')">Adicionar Agendamento</button>
+  </section>
+
+</body>
+</html>
