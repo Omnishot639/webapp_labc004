@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from models import Reagente, Meio, Agendamento
+from models import db, Reagente, Meio, Agendamento
 import os
 
 app = Flask(__name__)
@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-db = SQLAlchemy(app)
+db.init_app(app)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -163,4 +163,3 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-    
