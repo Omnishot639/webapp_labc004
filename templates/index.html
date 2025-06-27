@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Estoque de Reagentes - Laboratório</title>
-  <link rel="stylesheet" href="../static/style.css">
-  <script src="../static/script.js"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <header>
@@ -23,6 +23,7 @@
     <button onclick="showTab('agenda')">Agenda</button>
   </nav>
 
+  <!-- Reagentes -->
   <section id="reagentes" class="active">
     <h2>Reagentes</h2>
     <table>
@@ -30,12 +31,24 @@
         <tr><th>Nome</th><th>Quantidade</th><th>Validade</th><th>Localização</th><th class="edit-only hidden">Ações</th></tr>
       </thead>
       <tbody id="reagentes-body">
-        <tr><td>Ácido Lático</td><td>2L</td><td>12/2025</td><td>Estante A</td><td class="edit-only hidden" class="action-btns"><button>Editar</button><button>Remover</button></td></tr>
+        {% for r in reagentes %}
+        <tr>
+          <td>{{ r.nome }}</td>
+          <td>{{ r.quantidade }}</td>
+          <td>{{ r.validade }}</td>
+          <td>{{ r.localizacao }}</td>
+          <td class="edit-only hidden">
+            <button onclick="editar(this, 'reagentes', {{ r.id }})">Editar</button>
+            <button onclick="remover(this, 'reagentes', {{ r.id }})">Remover</button>
+          </td>
+        </tr>
+        {% endfor %}
       </tbody>
     </table>
     <button class="edit-only hidden" onclick="adicionar('reagentes')">Adicionar Reagente</button>
   </section>
 
+  <!-- Meios de Cultura -->
   <section id="meios">
     <h2>Meios de Cultura</h2>
     <table>
@@ -43,12 +56,24 @@
         <tr><th>Nome</th><th>Quantidade</th><th>Validade</th><th>Localização</th><th class="edit-only hidden">Ações</th></tr>
       </thead>
       <tbody id="meios-body">
-        <tr><td>SDA</td><td>10 placas</td><td>11/2024</td><td>Geladeira</td><td class="edit-only hidden"><button>Editar</button><button>Remover</button></td></tr>
+        {% for m in meios %}
+        <tr>
+          <td>{{ m.nome }}</td>
+          <td>{{ m.quantidade }}</td>
+          <td>{{ m.validade }}</td>
+          <td>{{ m.localizacao }}</td>
+          <td class="edit-only hidden">
+            <button onclick="editar(this, 'meios', {{ r.id }})">Editar</button>
+            <button onclick="remover(this, 'meios', {{ r.id }})">Remover</button>
+          </td>
+        </tr>
+        {% endfor %}
       </tbody>
     </table>
     <button class="edit-only hidden" onclick="adicionar('meios')">Adicionar Meio</button>
   </section>
 
+  <!-- Agenda -->
   <section id="agenda">
     <h2>Cronograma de Equipamentos e Vidrarias</h2>
     <table>
@@ -56,11 +81,21 @@
         <tr><th>Equipamento</th><th>Usuário</th><th>Data</th><th>Horário</th><th class="edit-only hidden">Ações</th></tr>
       </thead>
       <tbody id="agenda-body">
-        <tr><td>Autoclave</td><td>Ana</td><td>28/06/2025</td><td>08:00-10:00</td><td class="edit-only hidden"><button>Editar</button><button>Remover</button></td></tr>
+        {% for a in agenda %}
+        <tr>
+          <td>{{ a.equipamento }}</td>
+          <td>{{ a.usuario }}</td>
+          <td>{{ a.data }}</td>
+          <td>{{ a.horario }}</td>
+          <td class="edit-only hidden">
+            <button onclick="editar(this, 'agenda', {{ r.id }})">Editar</button>
+            <button onclick="remover(this, 'agenda', {{ r.id }})">Remover</button>
+          </td>
+        </tr>
+        {% endfor %}
       </tbody>
     </table>
     <button class="edit-only hidden" onclick="adicionar('agenda')">Adicionar Agendamento</button>
   </section>
-
 </body>
 </html>
