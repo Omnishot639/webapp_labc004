@@ -23,7 +23,6 @@
     <button onclick="showTab('agenda')">Agenda</button>
   </nav>
 
-  <!-- Reagentes -->
   <section id="reagentes" class="active">
     <h2>Reagentes</h2>
     <table>
@@ -48,7 +47,6 @@
     <button class="edit-only hidden" onclick="adicionar('reagentes')">Adicionar Reagente</button>
   </section>
 
-  <!-- Meios de Cultura -->
   <section id="meios">
     <h2>Meios de Cultura</h2>
     <table>
@@ -63,8 +61,8 @@
           <td>{{ m.validade }}</td>
           <td>{{ m.localizacao }}</td>
           <td class="edit-only hidden">
-            <button onclick="editar(this, 'meios', {{ r.id }})">Editar</button>
-            <button onclick="remover(this, 'meios', {{ r.id }})">Remover</button>
+            <button onclick="editar(this, 'meios', {{ m.id }})">Editar</button>
+            <button onclick="remover(this, 'meios', {{ m.id }})">Remover</button>
           </td>
         </tr>
         {% endfor %}
@@ -73,7 +71,6 @@
     <button class="edit-only hidden" onclick="adicionar('meios')">Adicionar Meio</button>
   </section>
 
-  <!-- Agenda -->
   <section id="agenda">
     <h2>Cronograma de Equipamentos e Vidrarias</h2>
     <table>
@@ -88,8 +85,8 @@
           <td>{{ a.data }}</td>
           <td>{{ a.horario }}</td>
           <td class="edit-only hidden">
-            <button onclick="editar(this, 'agenda', {{ r.id }})">Editar</button>
-            <button onclick="remover(this, 'agenda', {{ r.id }})">Remover</button>
+            <button onclick="editar(this, 'agenda', {{ a.id }})">Editar</button>
+            <button onclick="remover(this, 'agenda', {{ a.id }})">Remover</button>
           </td>
         </tr>
         {% endfor %}
