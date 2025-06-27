@@ -48,7 +48,7 @@ async function carregarTabela(tabela) {
       <td>${item.quantidade || item.usuario}</td>
       <td>${item.validade || item.data}</td>
       <td>${item.localizacao || item.horario}</td>
-      <td class="edit-only hidden">
+      <td class="edit-only${isLoggedIn ? "" : " hidden"}">
         <button onclick="editar(this, '${tabela}', ${item.id})">Editar</button>
         <button onclick="remover(this, '${tabela}', ${item.id})">Remover</button>
       </td>
