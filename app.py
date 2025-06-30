@@ -20,6 +20,9 @@ def proteger_rotas():
 
 @app.route("/", methods=["GET"])
 def index():
+    usuario_id = session.get("usuario_id")
+    usuario = Usuario.query.get(usuario_id) if usuario_id else None
+
     reagentes = Reagente.query.all()
     meios = Meio.query.all()
     agenda = Agendamento.query.all()
@@ -30,9 +33,9 @@ def index():
 def login():
     if request.method == "POST":
         username = request.form.get("usuario")
-        senha = request.form.get("senha")
+        senha_hash = request.form.get("senha")
         user = Usuario.query.filter_by(username=username).first()
-        if user and check_password_hash(user.senha, senha):
+        if user and check_password_hash(user.senha_hash, senha_hash):
             session["usuario_id"] = user.id
             return redirect(url_for("index"))
         else:
@@ -214,7 +217,7 @@ with app.app_context():
     if not Usuario.query.filter_by(username="admin").first():
         senha_admin = os.getenv("ADMIN_PASSWORD", "senha123")
         senha_hash = generate_password_hash(senha_admin)
-        admin = Usuario(username="admin", senha=senha_hash, is_admin=True)
+        admin = Usuario(username="admin", senha_hash=senha_hash, is_admin=True)
         db.session.add(admin)
         db.session.commit()
         print("Usuário admin criado com sucesso.")
