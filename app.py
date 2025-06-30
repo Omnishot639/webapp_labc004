@@ -29,9 +29,9 @@ def index():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        nome = request.form.get("usuario")
+        username = request.form.get("usuario")
         senha = request.form.get("senha")
-        user = Usuario.query.filter_by(nome=nome).first()
+        user = Usuario.query.filter_by(username=username).first()
         if user and check_password_hash(user.senha, senha):
             session["usuario_id"] = user.id
             return redirect(url_for("index"))
@@ -48,14 +48,14 @@ def logout():
 def listar_usuarios():
     if not is_admin(): return "Acesso negado", 403
     usuarios = Usuario.query.all()
-    return jsonify([{"id": u.id, "nome": u.nome, "is_admin": u.is_admin} for u in usuarios])
+    return jsonify([{"id": u.id, "username": u.username, "is_admin": u.is_admin} for u in usuarios])
 
 @app.route("/usuarios", methods=["POST"])
 def criar_usuario():
     if not is_admin(): return "Acesso negado", 403
     data = request.json
     senha_hash = generate_password_hash(data["senha"])
-    novo = Usuario(nome=data["nome"], senha=senha_hash, is_admin=data.get("is_admin", False))
+    novo = Usuario(username=data["username"], senha=senha_hash, is_admin=data.get("is_admin", False))
     db.session.add(novo)
     db.session.commit()
     return jsonify({"message": "Usuário criado"}), 201
@@ -211,10 +211,10 @@ def deletar_agendamento(id):
 
 with app.app_context():
     db.create_all()
-    if not Usuario.query.filter_by(nome="admin").first():
+    if not Usuario.query.filter_by(username="admin").first():
         senha_admin = os.getenv("ADMIN_PASSWORD", "senha123")
         senha_hash = generate_password_hash(senha_admin)
-        admin = Usuario(nome="admin", senha=senha_hash, is_admin=True)
+        admin = Usuario(username="admin", senha=senha_hash, is_admin=True)
         db.session.add(admin)
         db.session.commit()
         print("Usuário admin criado com sucesso.")
