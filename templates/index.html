@@ -11,9 +11,15 @@
   <header>
     <h1>Estoque e Agenda - Laboratório de Micologia</h1>
     <div class="login-area">
-      <span id="user-display"></span>
-      <button onclick="toggleLogin()" id="login-btn">Login</button>
-      <button onclick="logout()" id="logout-btn" class="hidden">Logout</button>
+    {% if usuario %}
+      <span id="user-display">Bem-vindo, {{ usuario.nome }}</span>
+      <a href="/logout">Logout</a>
+      {% if usuario.is_admin %}
+        <button onclick="gerenciarUsuarios()">Gerenciar Usuários</button>
+      {% endif %}
+    {% else %}
+      <a href="/login">Login</a>
+    {% endif %}
     </div>
   </header>
 

@@ -2,30 +2,78 @@ from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from models import db, Reagente, Meio, Agendamento
 import os
+from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 
-# Configuração do banco de dados via variável de ambiente
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
-@app.route("/", methods=["GET", "POST"])
+@app.before_request
+def proteger_rotas():
+    rotas_livres = ['index', 'login', 'static']
+    if request.endpoint not in rotas_livres and "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+@app.route("/", methods=["GET"])
 def index():
-    if request.method == "POST":
-        usuario = request.form.get("usuario")
-        senha = request.form.get("senha")
-
-        if usuario == "admin" and senha == "senha123":
-            return "Login aceito"
-        else:
-            return "Login inválido", 401
-
     reagentes = Reagente.query.all()
     meios = Meio.query.all()
     agenda = Agendamento.query.all()
-    return render_template("index.html", reagentes=reagentes, meios=meios, agenda=agenda)
+    usuario = Usuario.query.get(session.get("usuario_id"))
+    return render_template("index.html", reagentes=reagentes, meios=meios, agenda=agenda, usuario=usuario)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        nome = request.form.get("usuario")
+        senha = request.form.get("senha")
+        user = Usuario.query.filter_by(nome=nome, senha=senha).first()
+        if user:
+            session["usuario_id"] = user.id
+            return redirect(url_for("index"))
+        else:
+            return "Login inválido", 401
+    return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("index"))
+
+@app.route("/usuarios", methods=["GET"])
+def listar_usuarios():
+    if not is_admin(): return "Acesso negado", 403
+    usuarios = Usuario.query.all()
+    return jsonify([{"id": u.id, "nome": u.nome, "is_admin": u.is_admin} for u in usuarios])
+
+@app.route("/usuarios", methods=["POST"])
+def criar_usuario():
+    if not is_admin(): return "Acesso negado", 403
+    data = request.json
+    novo = Usuario(nome=data["nome"], senha=data["senha"], is_admin=data.get("is_admin", False))
+    db.session.add(novo)
+    db.session.commit()
+    return jsonify({"message": "Usuário criado"}), 201
+
+@app.route("/usuarios/<int:id>", methods=["DELETE"])
+def remover_usuario(id):
+    if not is_admin(): return "Acesso negado", 403
+    if session["usuario_id"] == id:
+        return jsonify({"message": "Você não pode se remover"}), 403
+    usuario = Usuario.query.get_or_404(id)
+    db.session.delete(usuario)
+    db.session.commit()
+    return jsonify({"message": "Usuário removido"})
+
+def is_admin():
+    uid = session.get("usuario_id")
+    if not uid:
+        return False
+    user = Usuario.query.get(uid)
+    return user and user.is_admin
 
 @app.route("/api/reagentes", methods=["GET"])
 def listar_reagentes():
@@ -159,7 +207,13 @@ def deletar_agendamento(id):
     db.session.commit()
     return jsonify({"message": "Agendamento removido"})
 
-#with app.app_context():
-#    db.create_all()
+with app.app_context():
+    db.create_all()
+    if not Usuario.query.filter_by(username="admin").first():
+        admin = Usuario(username="admin", is_admin=True)
+        admin.set_senha("senha123")
+        db.session.add(admin)
+        db.session.commit()
+        print("Admin criado com sucesso.")
 app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 app.run(debug=True)
