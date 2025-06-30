@@ -1,13 +1,14 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from models import db, Reagente, Meio, Agendamento, Usuario
 import os
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.secret_key = os.getenv("SECRET_KEY", "chave-fallback-insegura")
 
 db.init_app(app)
 
@@ -30,8 +31,8 @@ def login():
     if request.method == "POST":
         nome = request.form.get("usuario")
         senha = request.form.get("senha")
-        user = Usuario.query.filter_by(nome=nome, senha=senha).first()
-        if user:
+        user = Usuario.query.filter_by(nome=nome).first()
+        if user and check_password_hash(user.senha, senha):
             session["usuario_id"] = user.id
             return redirect(url_for("index"))
         else:
@@ -53,7 +54,8 @@ def listar_usuarios():
 def criar_usuario():
     if not is_admin(): return "Acesso negado", 403
     data = request.json
-    novo = Usuario(nome=data["nome"], senha=data["senha"], is_admin=data.get("is_admin", False))
+    senha_hash = generate_password_hash(data["senha"])
+    novo = Usuario(nome=data["nome"], senha=senha_hash, is_admin=data.get("is_admin", False))
     db.session.add(novo)
     db.session.commit()
     return jsonify({"message": "Usuário criado"}), 201
@@ -209,11 +211,12 @@ def deletar_agendamento(id):
 
 with app.app_context():
     db.create_all()
-    if not Usuario.query.filter_by(username="admin").first():
-        admin = Usuario(username="admin", is_admin=True)
-        admin.set_senha("senha123")
+    if not Usuario.query.filter_by(nome="admin").first():
+        senha_admin = os.getenv("ADMIN_PASSWORD", "senha123")
+        senha_hash = generate_password_hash(senha_admin)
+        admin = Usuario(nome="admin", senha=senha_hash, is_admin=True)
         db.session.add(admin)
         db.session.commit()
-        print("Admin criado com sucesso.")
-app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-app.run(debug=True)
+        print("Usuário admin criado com sucesso.")
+
+app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
