@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from models import db, Reagente, Meio, Agendamento
+from models import db, Reagente, Meio, Agendamento, Usuario
 import os
 from werkzeug.security import generate_password_hash
 
