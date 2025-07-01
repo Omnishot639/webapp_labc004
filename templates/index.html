@@ -15,7 +15,6 @@
       <span id="user-display">Bem-vindo, {{ usuario.nome }}</span>
       <a href="/logout">Logout</a>
       {% if usuario.is_admin %}
-        <button onclick="gerenciarUsuarios()">Gerenciar Usuários</button>
       {% endif %}
     {% else %}
       <a href="/login">Login</a>
@@ -99,6 +98,33 @@
       </tbody>
     </table>
     <button class="edit-only hidden" onclick="adicionar('agenda')">Adicionar Agendamento</button>
-  </section>
+  
+  {% if usuario and usuario.is_admin %}
+    <section id="usuarios">
+      <h2>Gerenciamento de Usuários</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Admin?</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="usuarios-body">
+        </tbody>
+      </table>
+      <h3>Adicionar Novo Usuário</h3>
+      <form id="form-usuario" onsubmit="return adicionarUsuario()">
+        <input type="text" id="novo-nome" placeholder="Nome" required />
+        <input type="password" id="nova-senha" placeholder="Senha" required />
+        <label>
+          <input type="checkbox" id="novo-admin" />
+          Admin
+        </label>
+        <button type="submit">Adicionar</button>
+      </form>
+    </section>
+  {% endif %}
+
 </body>
 </html>

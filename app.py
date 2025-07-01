@@ -80,6 +80,13 @@ def is_admin():
     user = Usuario.query.get(uid)
     return user and user.is_admin
 
+@app.route('/usuarios')
+def usuarios():
+    usuario = Usuario.query.get(session.get("usuario_id"))
+    if not usuario or not usuario.is_admin:
+        return redirect('/')
+    return render_template("usuarios.html", usuario=usuario)
+
 @app.route("/api/reagentes", methods=["GET"])
 def listar_reagentes():
     reagentes = Reagente.query.all()
