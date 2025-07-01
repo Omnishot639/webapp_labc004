@@ -219,14 +219,14 @@ def deletar_agendamento(id):
     db.session.commit()
     return jsonify({"message": "Agendamento removido"})
 
-with app.app_context():
-    db.create_all()
-    if not Usuario.query.filter_by(username="admin").first():
-        senha_admin = os.getenv("ADMIN_PASSWORD", "senha123")
-        senha_hash = generate_password_hash(senha_admin)
-        admin = Usuario(username="admin", senha_hash=senha_hash, is_admin=True)
-        db.session.add(admin)
-        db.session.commit()
-        print("Usuário admin criado com sucesso.")
+#with app.app_context():
+#    db.create_all()
+#    if not Usuario.query.filter_by(username="admin").first():
+#        senha_admin = os.getenv("ADMIN_PASSWORD", "senha123")
+#        senha_hash = generate_password_hash(senha_admin)
+#        admin = Usuario(username="admin", senha_hash=senha_hash, is_admin=True)
+#        db.session.add(admin)
+#        db.session.commit()
+#        print("Usuário admin criado com sucesso.")
 
 app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
