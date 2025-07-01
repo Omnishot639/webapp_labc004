@@ -30,6 +30,7 @@
         <tr><th>Nome</th><th>Quantidade</th><th>Validade</th><th>Localização</th><th class="edit-only hidden">Ações</th></tr>
       </thead>
       <tbody id="reagentes-body">
+       
         {% for r in reagentes %}
         <tr>
           <td>{{ r.nome }}</td>
@@ -54,7 +55,7 @@
         <tr><th>Nome</th><th>Quantidade</th><th>Validade</th><th>Localização</th><th class="edit-only hidden">Ações</th></tr>
       </thead>
       <tbody id="meios-body">
-        {% for m in meios %}
+      {% for m in meios %}
         <tr>
           <td>{{ m.nome }}</td>
           <td>{{ m.quantidade }}</td>
@@ -78,7 +79,7 @@
         <tr><th>Equipamento</th><th>Usuário</th><th>Data</th><th>Horário</th><th class="edit-only hidden">Ações</th></tr>
       </thead>
       <tbody id="agenda-body">
-        {% for a in agenda %}
+      {% for a in agenda %}
         <tr>
           <td>{{ a.equipamento }}</td>
           <td>{{ a.usuario }}</td>

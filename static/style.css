@@ -1,15 +1,35 @@
 body {
       font-family: Arial, sans-serif;
-      background-color: #f3f4f6;
-      color: #1f2937;
+      background-color: #fff1fd;
+      color: #000000;
       margin: 0;
       padding: 0;
     }
     header {
-      background-color: #4b5563;
+      background: linear-gradient(to right, #26c6da, #66bb6a);
       color: white;
       padding: 1em;
       text-align: center;
+    }
+    button{
+      background: linear-gradient(to right, #4dd0e1, #81c784); /* Azul-claro e verde-claro */
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease-in-out;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .button:hover {
+      background: linear-gradient(to right, #26c6da, #66bb6a);
+      transform: scale(1.05);
+    }
+    .button:active {
+      transform: scale(0.98);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     nav {
       display: flex;
