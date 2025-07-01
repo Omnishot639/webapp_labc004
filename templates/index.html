@@ -11,14 +11,9 @@
   <header>
     <h1>Estoque e Agenda - Laboratório de Micologia</h1>
     <div class="login-area">
-    {% if usuario %}
-      <span id="user-display">Bem-vindo, {{ usuario.nome }}</span>
-      <a href="/logout">Logout</a>
-      {% if usuario.is_admin %}
-      {% endif %}
-    {% else %}
-      <a href="/login">Login</a>
-    {% endif %}
+      <span id="user-display"></span>
+      <button onclick="toggleLogin()" id="login-btn">Login</button>
+      <button onclick="logout()" id="logout-btn" class="hidden">Logout</button>
     </div>
   </header>
 
@@ -26,7 +21,6 @@
     <button onclick="showTab('reagentes')">Reagentes</button>
     <button onclick="showTab('meios')">Meios de Cultura</button>
     <button onclick="showTab('agenda')">Agenda</button>
-    <button onclick="showTab('usuarios')">Gerenciar Usuários</button>
   </nav>
 
   <section id="reagentes" class="active">
@@ -99,33 +93,6 @@
       </tbody>
     </table>
     <button class="edit-only hidden" onclick="adicionar('agenda')">Adicionar Agendamento</button>
-  
-  {% if usuario and usuario.is_admin %}
-    <section id="usuarios">
-      <h2>Gerenciamento de Usuários</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Admin?</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="usuarios-body">
-        </tbody>
-      </table>
-      <h3>Adicionar Novo Usuário</h3>
-      <form id="form-usuario" onsubmit="return adicionarUsuario()">
-        <input type="text" id="novo-nome" placeholder="Nome" required />
-        <input type="password" id="nova-senha" placeholder="Senha" required />
-        <label>
-          <input type="checkbox" id="novo-admin" />
-          Admin
-        </label>
-        <button type="submit">Adicionar</button>
-      </form>
-    </section>
-  {% endif %}
-
+  </section>
 </body>
 </html>
