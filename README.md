@@ -25,15 +25,15 @@
 ## 📁 Estrutura do Projeto
 
 /webbapp_labc004/
--├── app.py
--├── models.py
--├── requirements.txt
--├── static/
--│ ├── style.css
--│ └── script.js
--├── templates/
--│ └── index.html
--└── README.md
+<br>├── app.py
+<br>├── models.py
+<br>├── requirements.txt
+<br>├── static/
+<br>│ ├── style.css
+<br>│ └── script.js
+<br>├── templates/
+<br>│ └── index.html
+<br>└── README.md
 
 
 ---
